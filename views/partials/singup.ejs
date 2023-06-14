@@ -1,0 +1,70 @@
+<link rel="stylesheet" href="/stylesheets/partials/login.css">
+
+<div id="content">
+    <form id="form" dir="rtl" action="/login">
+        <h1 class="text-xl my-auto"> المطور عبد الرحمن</h1>
+        <div class="my-auto p-2">
+            <label for="">اسمك</label>
+            <input name="name" type="text">
+        </div>
+        <div class="my-auto">
+            <label for="">اسم المستخدم</label>
+            <input name="username" type="text">
+        </div>
+        <div class="my-auto p-2">
+            <label for="">ايميل</label>
+            <input name="email" type="text">
+            <p id="error.eamil" ></p>
+        </div>
+        <div class="my-auto p-2">
+            <label for="">كلمة المرور</label>
+            <input name="password" type="text">
+            <p id="error.password"></p>
+        </div>
+        <button type="submit"
+            class="  text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">انشاء
+            حساب</button>
+    </form>
+</div>
+<script>
+    const form = document.getElementById("form")
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const url = "/singup"
+        const data = {
+            username: form.username.value,
+            password: form.password.value,
+            email: form.email.value,
+            name: form.name.value
+        };
+        try {
+            const res = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            const data1= await res.json()
+            if(data1.error){    
+                const error_email =  document.getElementById("error.eamil")
+                error_email.textContent= data1.error.email
+                error_email.setAttribute("class","color_red")
+                const error_password = document.getElementById("error.password")
+                error_password.textContent =  data1.error.password
+                error_password.setAttribute("class","color_red")
+                
+            } 
+            if(data1.user){
+                    location.assign("/")
+
+                }
+
+        }
+        catch (error) {
+            console.log(error)
+
+        }
+    })
+
+</script>

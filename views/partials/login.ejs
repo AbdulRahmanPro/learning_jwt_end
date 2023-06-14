@@ -1,0 +1,63 @@
+<link rel="stylesheet" href="/stylesheets/partials/login.css">
+
+<div id="content">
+    <form id="form" dir="rtl" action="/login" method="get">
+        <h1 class="text-xl my-auto"> المطور عبد الرحمن</h1>
+        <div class="my-auto p-2">
+            <label for="">ايميل</label>
+            <input type="text" name="email">
+            <p id="error.email"></p>
+        </div>
+        <div class="my-auto p-2">
+            <label for="">كلمة المرور</label>
+            <input type="password" name="password">
+            <p id="error.password"></p>
+        </div>
+        <button id="button" type="submit"
+            class="  text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">انشاء
+            حساب</button>
+    </form>
+</div>
+<script>
+    const form = document.getElementById("form")
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const data = {
+            email: form.email.value,
+            password: form.password.value,
+        };
+        try {
+            const res = await fetch("/login", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            const data1 = await res.json()
+            console.log(data1)
+            if(data1.error){
+                const email =document.getElementById("error.email")
+                email.textContent= data1.error.email
+                email.setAttribute("class","color_red")
+                if(data1.error.password){
+                const password1 =document.getElementById("error.password")
+                password1.textContent = data1.error.password
+                password1.setAttribute("class","color_red")
+            }
+            }
+            if(data1.user){
+                location.assign("/home")
+            }
+           
+
+        }
+        catch (error) {
+            
+            console.log(error)
+
+        }
+    })
+
+</script>
